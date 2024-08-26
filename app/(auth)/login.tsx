@@ -1,23 +1,42 @@
-import { View, Text, Image, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
-import { Link } from "expo-router";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
+import { useCallback, useState } from "react";
+import { Link, router } from "expo-router";
 
 import { icons, images } from "@/constants";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import OAuth from "@/components/OAuth";
+import { useSignIn } from "@clerk/clerk-expo";
 
 const Login = () => {
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { signIn, setActive, isLoaded } = useSignIn();
 
   const [form, setForm] = useState({
-    name: "",
     email: "",
     password: "",
   });
 
-  const onSignUpPress = async () => {};
+  const onSignInPress = useCallback(async () => {
+    if (!isLoaded) return;
+
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: form.email,
+        password: form.password,
+      });
+
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+        router.replace("/(root)/(tabs)/home");
+      } else {
+        console.log(JSON.stringify(signInAttempt, null, 2));
+        Alert.alert("Error", "Log in failed. Please try again.");
+      }
+    } catch (err: any) {
+      console.log(JSON.stringify(err, null, 2));
+      Alert.alert("Error", err.errors[0].longMessage);
+    }
+  }, [isLoaded, form]);
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -51,7 +70,7 @@ const Login = () => {
 
           <CustomButton
             title="Sign In"
-            onPress={onSignUpPress}
+            onPress={onSignInPress}
             className="mt-6"
           />
 
@@ -59,10 +78,10 @@ const Login = () => {
 
           <Link
             href="/register"
-            className="text-lg text-center text-general-200 mt-10"
+            className="text-base text-center text-general-200 mt-10"
           >
             Don't have an account?{" "}
-            <Text className="text-primary-500">Sign Up</Text>
+            <Text className="text-primary-500">Register</Text>
           </Link>
         </View>
       </View>

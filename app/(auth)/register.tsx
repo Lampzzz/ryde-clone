@@ -126,7 +126,8 @@ const Register = () => {
           />
           <CustomButton
             title="Sign Up"
-            onPress={onSignUpPress}
+            // onPress={onSignUpPress}
+            onPress={() => router.push("/(root)/(tabs)/home")}
             className="mt-6"
           />
 
@@ -134,7 +135,7 @@ const Register = () => {
 
           <Link
             href="/login"
-            className="text-lg text-center text-general-200 mt-5"
+            className="text-base text-center text-general-200 mt-5"
           >
             Already have an account?{" "}
             <Text className="text-primary-500">Log In</Text>
@@ -143,9 +144,6 @@ const Register = () => {
 
         <ReactNativeModal
           isVisible={verification.state === "pending"}
-          // onBackdropPress={() =>
-          //   setVerification({ ...verification, state: "default" })
-          // }
           onModalHide={() => {
             if (verification.state === "success") {
               setShowSuccessModal(true);
