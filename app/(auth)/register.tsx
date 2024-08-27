@@ -126,8 +126,8 @@ const Register = () => {
           />
           <CustomButton
             title="Sign Up"
-            // onPress={onSignUpPress}
-            onPress={() => router.push("/(root)/(tabs)/home")}
+            onPress={onSignUpPress}
+            // onPress={() => router.push("/(root)/(tabs)/home")}
             className="mt-6"
           />
 
