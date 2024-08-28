@@ -25,6 +25,8 @@ const Login = () => {
         password: form.password,
       });
 
+      // console.log(`Login: ${JSON.stringify(signInAttempt, null, 2)}`);
+
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
         router.replace("/(root)/(tabs)/home");
@@ -57,7 +59,6 @@ const Login = () => {
             value={form.email}
             onChangeText={(value) => setForm({ ...form, email: value })}
           />
-
           <InputField
             label="Password"
             placeholder="Enter password"
@@ -67,15 +68,12 @@ const Login = () => {
             value={form.password}
             onChangeText={(value) => setForm({ ...form, password: value })}
           />
-
           <CustomButton
             title="Sign In"
             onPress={onSignInPress}
             className="mt-6"
           />
-
           <OAuth />
-
           <Link
             href="/register"
             className="text-base text-center text-general-200 mt-10"

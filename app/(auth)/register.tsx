@@ -1,14 +1,14 @@
-import { View, Text, Image, ScrollView, Alert } from "react-native";
 import { useState } from "react";
 import { Link, router } from "expo-router";
 import { useSignUp } from "@clerk/clerk-expo";
+import ReactNativeModal from "react-native-modal";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
 
 import { icons, images } from "@/constants";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import OAuth from "@/components/OAuth";
 import { fetchAPI } from "@/lib/fetch";
-import ReactNativeModal from "react-native-modal";
 
 const Register = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -55,6 +55,10 @@ const Register = () => {
         code: verification.code,
       });
 
+      // console.log(
+      //   `Complete Sign Up: ${JSON.stringify(completeSignUp, null, 2)}`
+      // );
+
       if (completeSignUp.status === "complete") {
         await fetchAPI("/(api)/user", {
           method: "POST",
@@ -79,6 +83,7 @@ const Register = () => {
         });
       }
     } catch (err: any) {
+      console.log(JSON.stringify(err, null, 2));
       setVerification({
         ...verification,
         error: err.errors[0].longMessage,
@@ -105,7 +110,6 @@ const Register = () => {
             value={form.name}
             onChangeText={(value) => setForm({ ...form, name: value })}
           />
-
           <InputField
             label="Email"
             placeholder="Enter email"
@@ -114,7 +118,6 @@ const Register = () => {
             value={form.email}
             onChangeText={(value) => setForm({ ...form, email: value })}
           />
-
           <InputField
             label="Password"
             placeholder="Enter password"
@@ -127,12 +130,9 @@ const Register = () => {
           <CustomButton
             title="Sign Up"
             onPress={onSignUpPress}
-            // onPress={() => router.push("/(root)/(tabs)/home")}
             className="mt-6"
           />
-
           <OAuth />
-
           <Link
             href="/login"
             className="text-base text-center text-general-200 mt-5"

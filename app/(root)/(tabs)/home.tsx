@@ -152,7 +152,7 @@ const Home = () => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
 
-      console.log(`Status: ${status}`);
+      // console.log(`Status: ${status}`);
 
       if (status !== "granted") {
         setHasPermission(false);
@@ -160,14 +160,14 @@ const Home = () => {
       }
       let location = await Location.getCurrentPositionAsync();
 
-      console.log(`Location: ${JSON.stringify(location, null, 2)}`);
+      // console.log(`Location: ${JSON.stringify(location, null, 2)}`);
 
       const address = await Location.reverseGeocodeAsync({
         latitude: location.coords?.latitude!,
         longitude: location.coords?.longitude!,
       });
 
-      console.log(`Address: ${JSON.stringify(address, null, 2)}`);
+      // console.log(`Address: ${JSON.stringify(address, null, 2)}`);
 
       setUserLocation({
         latitude: location.coords?.latitude,
