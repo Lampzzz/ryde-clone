@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 
 import { useLocationStore } from "@/store";
-import RideLayout from "@/components/RIdeLayout";
+import RideLayout from "@/components/RideLayout";
 import GoogleTextInput from "@/components/GoogleTextInput";
 import { icons } from "@/constants";
 import CustomButton from "@/components/CustomButton";
