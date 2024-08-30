@@ -10,7 +10,7 @@ import InputField from "@/components/InputField";
 import OAuth from "@/components/OAuth";
 import { fetchAPI } from "@/lib/fetch";
 
-const Register = () => {
+const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -134,7 +134,7 @@ const Register = () => {
           />
           <OAuth />
           <Link
-            href="/login"
+            href="/sign-in"
             className="text-base text-center text-general-200 mt-5"
           >
             Already have an account?{" "}
@@ -204,4 +204,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignUp;

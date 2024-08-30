@@ -14,6 +14,7 @@ import { icons, images } from "@/constants";
 import RideCard from "@/components/RideCard";
 import { router } from "expo-router";
 import GoogleTextInput from "@/components/GoogleTextInput";
+import NaminatimSearchInput from "@/components/NaminatimSearchInput";
 import Map from "@/components/Map";
 import { useLocationStore } from "@/store";
 import { useEffect, useState } from "react";
@@ -139,7 +140,7 @@ const Home = () => {
 
   const handleSignOut = () => {
     signOut();
-    router.replace("/(auth)/login");
+    router.replace("/(auth)/sign-in");
   };
 
   const handleDestinationPress = (location: {
@@ -151,8 +152,6 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-
-      // console.log(`Status: ${status}`);
 
       if (status !== "granted") {
         setHasPermission(false);
@@ -223,7 +222,13 @@ const Home = () => {
               </TouchableOpacity>
             </View>
 
-            <GoogleTextInput
+            {/* <GoogleTextInput
+              icon={icons.search}
+              containerStyle="bg-white shadow-md shadow-neutral-300"
+              handlePress={handleDestinationPress}
+            /> */}
+
+            <NaminatimSearchInput
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}

@@ -3,10 +3,10 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 import { Image, Text, View } from "react-native";
 
 import Payment from "@/components/Payment";
-import RideLayout from "@/components/RideLayout";
 import { icons } from "@/constants";
 import { formatTime } from "@/lib/utils";
 import { useDriverStore, useLocationStore } from "@/store";
+import RideLayout from "@/components/RideLayout";
 
 const BookRide = () => {
   const { user } = useUser();
@@ -14,13 +14,13 @@ const BookRide = () => {
   const { drivers, selectedDriver } = useDriverStore();
 
   const driverDetails = drivers?.filter(
-    (driver) => +driver.id === selectedDriver
+    (driver) => driver.id === selectedDriver
   )[0];
 
   return (
     <StripeProvider
       publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
-      merchantIdentifier="merchant.com.uber"
+      merchantIdentifier="merchant.ryde.com"
       urlScheme="myapp"
     >
       <RideLayout title="Book Ride">

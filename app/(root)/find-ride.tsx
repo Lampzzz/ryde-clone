@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
+import { router } from "expo-router";
 
 import { useLocationStore } from "@/store";
 import RideLayout from "@/components/RideLayout";
 import GoogleTextInput from "@/components/GoogleTextInput";
 import { icons } from "@/constants";
 import CustomButton from "@/components/CustomButton";
-import { router } from "expo-router";
 
 const FindRide = () => {
   const {
@@ -14,6 +14,8 @@ const FindRide = () => {
     setDestinationLocation,
     setUserLocation,
   } = useLocationStore();
+
+  console.log(destinationAddress);
 
   return (
     <RideLayout title="Ride">
@@ -34,7 +36,8 @@ const FindRide = () => {
 
         <GoogleTextInput
           icon={icons.map}
-          initialLocation={destinationAddress!}
+          initialLocation={userAddress!}
+          // initialLocation={destinationAddress!}
           containerStyle="bg-neutral-100"
           textInputBackgroundColor="transparent"
           handlePress={(location) => setDestinationLocation(location)}

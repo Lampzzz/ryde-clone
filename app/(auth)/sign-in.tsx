@@ -1,14 +1,14 @@
-import { View, Text, Image, ScrollView, Alert } from "react-native";
 import { useCallback, useState } from "react";
 import { Link, router } from "expo-router";
+import { useSignIn } from "@clerk/clerk-expo";
+import { View, Text, Image, ScrollView, Alert } from "react-native";
 
 import { icons, images } from "@/constants";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import OAuth from "@/components/OAuth";
-import { useSignIn } from "@clerk/clerk-expo";
 
-const Login = () => {
+const SignIn = () => {
   const { signIn, setActive, isLoaded } = useSignIn();
 
   const [form, setForm] = useState({
@@ -25,7 +25,7 @@ const Login = () => {
         password: form.password,
       });
 
-      // console.log(`Login: ${JSON.stringify(signInAttempt, null, 2)}`);
+      // console.log(`SignIn: ${JSON.stringify(signInAttempt, null, 2)}`);
 
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
@@ -75,7 +75,7 @@ const Login = () => {
           />
           <OAuth />
           <Link
-            href="/register"
+            href="/sign-up"
             className="text-base text-center text-general-200 mt-10"
           >
             Don't have an account?{" "}
@@ -87,4 +87,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;
