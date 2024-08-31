@@ -1,6 +1,6 @@
 import { Driver, MarkerData } from "@/types/type";
 
-const osrmAPI = "http://router.project-osrm.org/route/v1/driving"; // Public OSRM server
+const directionsAPI = process.env.EXPO_PUBLIC_DIRECTIONS_API_KEY;
 
 export const generateMarkersFromData = ({
   data,
@@ -96,18 +96,19 @@ export const calculateDriverTimes = async ({
   try {
     const timesPromises = markers.map(async (marker) => {
       const responseToUser = await fetch(
-        `${osrmAPI}/${marker.longitude},${marker.latitude};${userLongitude},${userLatitude}?overview=false&geometries=polyline&steps=false`
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${marker.latitude},${marker.longitude}&destination=${userLatitude},${userLongitude}&key=${directionsAPI}`
       );
       const dataToUser = await responseToUser.json();
-      const timeToUser = dataToUser.routes[0].duration / 60; // Time in minutes
+      const timeToUser = dataToUser.routes[0].legs[0].duration.value; // Time in seconds
 
       const responseToDestination = await fetch(
-        `${osrmAPI}/${userLongitude},${userLatitude};${destinationLongitude},${destinationLatitude}?overview=false&geometries=polyline&steps=false`
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${userLatitude},${userLongitude}&destination=${destinationLatitude},${destinationLongitude}&key=${directionsAPI}`
       );
       const dataToDestination = await responseToDestination.json();
-      const timeToDestination = dataToDestination.routes[0].duration / 60; // Time in minutes
+      const timeToDestination =
+        dataToDestination.routes[0].legs[0].duration.value; // Time in seconds
 
-      const totalTime = timeToUser + timeToDestination;
+      const totalTime = (timeToUser + timeToDestination) / 60; // Total time in minutes
       const price = (totalTime * 0.5).toFixed(2); // Calculate price based on time
 
       return { ...marker, time: totalTime, price };

@@ -16,7 +16,7 @@ const ConfirmRide = () => {
       <FlatList
         data={drivers}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <DriverCard
             item={item}
             selected={selectedDriver!}

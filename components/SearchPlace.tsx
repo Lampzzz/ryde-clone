@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { router } from "expo-router";
+import axios from "axios";
 import {
   View,
   TextInput,
@@ -7,8 +9,6 @@ import {
   FlatList,
   Text,
 } from "react-native";
-import { router } from "expo-router";
-import axios from "axios";
 
 import { icons } from "@/constants";
 import { GoogleInputProps } from "@/types/type";
@@ -20,7 +20,7 @@ interface SearchResult {
   display_name: string;
 }
 
-const NominatimSearchInput = ({
+const SearchPlace = ({
   icon,
   initialLocation,
   containerStyle,
@@ -29,6 +29,8 @@ const NominatimSearchInput = ({
 }: GoogleInputProps) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
+
+  console.log(`Results: ${JSON.stringify(results, null, 2)}`);
 
   const searchLocations = async (text: string) => {
     try {
@@ -51,28 +53,18 @@ const NominatimSearchInput = ({
 
   return (
     <View
-      className={`flex flex-row items-center justify-center relative z-50 rounded-xl ${containerStyle}`}
+      className={`flex flex-row items-center justify-center relative z-50 rounded-full p-3 ${containerStyle}`}
     >
-      <View className="flex-1 flex-row items-center bg-white rounded-lg">
-        <TouchableOpacity onPress={() => router.push("/(root)/find-ride")}>
-          <View className="justify-center items-center w-6 h-6">
-            <Image
-              source={icon ? icon : icons.search}
-              className="w-6 h-6"
-              resizeMode="contain"
-            />
-          </View>
-        </TouchableOpacity>
+      <View className="flex-1 flex-row items-center ">
+        <View className="justify-center items-center w-6 h-6">
+          <Image
+            source={icon ? icon : icons.search}
+            className="w-6 h-6"
+            resizeMode="contain"
+          />
+        </View>
         <TextInput
-          style={{
-            backgroundColor: textInputBackgroundColor || "white",
-            fontSize: 16,
-            fontWeight: "600",
-            marginTop: 5,
-            width: "100%",
-            borderRadius: 200,
-            paddingHorizontal: 15,
-          }}
+          className={`px-3 text-base ${textInputBackgroundColor || "white"}`}
           placeholder={initialLocation ?? "Where do you want to go?"}
           placeholderTextColor="gray"
           value={query}
@@ -103,10 +95,10 @@ const NominatimSearchInput = ({
           )}
           style={{
             position: "absolute",
-            top: 60,
+            top: "200%",
             width: "100%",
             backgroundColor: "white",
-            borderRadius: 10,
+            borderRadius: 20,
             shadowColor: "#d4d4d4",
             zIndex: 99,
           }}
@@ -116,4 +108,4 @@ const NominatimSearchInput = ({
   );
 };
 
-export default NominatimSearchInput;
+export default SearchPlace;

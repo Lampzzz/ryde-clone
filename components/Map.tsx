@@ -49,6 +49,8 @@ const Map = () => {
 
   useEffect(() => {
     if (markers.length > 0 && destinationLatitude && destinationLongitude) {
+      console.log("test");
+
       calculateDriverTimes({
         markers,
         userLatitude,

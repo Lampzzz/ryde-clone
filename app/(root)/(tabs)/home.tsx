@@ -1,6 +1,8 @@
 import { useUser, useAuth } from "@clerk/clerk-expo";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Location from "expo-location";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   FlatList,
   View,
@@ -12,12 +14,9 @@ import {
 
 import { icons, images } from "@/constants";
 import RideCard from "@/components/RideCard";
-import { router } from "expo-router";
-import GoogleTextInput from "@/components/GoogleTextInput";
-import NaminatimSearchInput from "@/components/NaminatimSearchInput";
+import SearchPlace from "@/components/SearchPlace";
 import Map from "@/components/Map";
 import { useLocationStore } from "@/store";
-import { useEffect, useState } from "react";
 
 const recentRides = [
   {
@@ -129,12 +128,10 @@ const recentRides = [
 const Home = () => {
   const { user } = useUser();
   const { signOut } = useAuth();
-
   const { setUserLocation, setDestinationLocation } = useLocationStore();
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
 
   const loading = false;
-
-  const [hasPermission, setHasPermission] = useState<boolean>(false);
 
   // console.log(JSON.stringify(user, null, 2));
 
@@ -147,7 +144,11 @@ const Home = () => {
     latitude: number;
     longitude: number;
     address: string;
-  }) => {};
+  }) => {
+    setDestinationLocation(location);
+
+    router.push("/(root)/find-ride");
+  };
 
   useEffect(() => {
     (async () => {
@@ -180,7 +181,6 @@ const Home = () => {
     <SafeAreaView>
       <FlatList
         data={recentRides?.slice(0, 5)}
-        // data={[]}
         renderItem={({ item }) => <RideCard ride={item} />}
         keyExtractor={(item, index) => index.toString()}
         className="px-5"
@@ -228,21 +228,18 @@ const Home = () => {
               handlePress={handleDestinationPress}
             /> */}
 
-            <NaminatimSearchInput
+            <SearchPlace
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}
             />
 
-            <>
-              <Text className="text-xl font-JakartaBold mt-5 mb-3">
-                Your current location
-              </Text>
-              <View className="flex flex-row items-center bg-transparent h-[300px]">
-                <Map />
-              </View>
-            </>
-
+            <Text className="text-xl font-JakartaBold mt-5 mb-3">
+              Your current location
+            </Text>
+            <View className="flex flex-row items-center bg-transparent h-[300px]">
+              <Map />
+            </View>
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Rides
             </Text>
