@@ -1,9 +1,8 @@
-import MapView, { Marker, PROVIDER_DEFAULT, Polyline } from "react-native-maps";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
 
-import { useDriverStore, useLocationStore } from "@/store";
-import { Driver, MarkerData } from "@/types/type";
 import { icons } from "@/constants";
 import { useFetch } from "@/lib/fetch";
 import {
@@ -11,11 +10,10 @@ import {
   calculateRegion,
   generateMarkersFromData,
 } from "@/lib/map";
+import { useDriverStore, useLocationStore } from "@/store";
+import { Driver, MarkerData } from "@/types/type";
 
-interface Coordinate {
-  latitude: number;
-  longitude: number;
-}
+const directionsAPI = process.env.EXPO_PUBLIC_DIRECTIONS_API_KEY;
 
 const Map = () => {
   const {
@@ -25,16 +23,9 @@ const Map = () => {
     destinationLongitude,
   } = useLocationStore();
   const { selectedDriver, setDrivers } = useDriverStore();
+
   const { data: drivers, loading, error } = useFetch<Driver[]>("/(api)/driver");
   const [markers, setMarkers] = useState<MarkerData[]>([]);
-  const [routeCoordinates, setRouteCoordinates] = useState<Coordinate[]>([]);
-
-  const region = calculateRegion({
-    userLatitude,
-    userLongitude,
-    destinationLatitude,
-    destinationLongitude,
-  });
 
   useEffect(() => {
     if (Array.isArray(drivers)) {
@@ -51,7 +42,11 @@ const Map = () => {
   }, [drivers, userLatitude, userLongitude]);
 
   useEffect(() => {
-    if (markers.length > 0 && destinationLatitude && destinationLongitude) {
+    if (
+      markers.length > 0 &&
+      destinationLatitude !== undefined &&
+      destinationLongitude !== undefined
+    ) {
       calculateDriverTimes({
         markers,
         userLatitude,
@@ -64,51 +59,26 @@ const Map = () => {
     }
   }, [markers, destinationLatitude, destinationLongitude]);
 
-  useEffect(() => {
-    const fetchDirections = async () => {
-      if (
-        !userLatitude ||
-        !userLongitude ||
-        !destinationLatitude ||
-        !destinationLongitude
-      )
-        return;
+  const region = calculateRegion({
+    userLatitude,
+    userLongitude,
+    destinationLatitude,
+    destinationLongitude,
+  });
 
-      const token = "5b3ce3597851110001cf6248c3bc638c236745d294703080b812f292";
-      const response = await fetch(
-        `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${token}&start=${userLongitude},${userLatitude}&end=${destinationLongitude},${destinationLatitude}`
-      );
-
-      const data = await response.json();
-
-      const coordinates = data.features[0].geometry.coordinates.map(
-        (coord: [number, number]) => ({
-          latitude: coord[1],
-          longitude: coord[0],
-        })
-      );
-
-      setRouteCoordinates(coordinates);
-    };
-
-    fetchDirections();
-  }, [userLatitude, userLongitude, destinationLatitude, destinationLongitude]);
-
-  if (loading || (!userLatitude && !userLongitude)) {
+  if (loading || (!userLatitude && !userLongitude))
     return (
       <View className="flex justify-between items-center w-full">
         <ActivityIndicator size="small" color="#000" />
       </View>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
       <View className="flex justify-between items-center w-full">
         <Text>Error: {error}</Text>
       </View>
     );
-  }
 
   return (
     <MapView
@@ -121,7 +91,7 @@ const Map = () => {
       showsUserLocation={true}
       userInterfaceStyle="light"
     >
-      {markers.map((marker) => (
+      {markers.map((marker, index) => (
         <Marker
           key={marker.id}
           coordinate={{
@@ -146,11 +116,18 @@ const Map = () => {
             title="Destination"
             image={icons.pin}
           />
-
-          <Polyline
-            coordinates={routeCoordinates}
+          <MapViewDirections
+            origin={{
+              latitude: userLatitude!,
+              longitude: userLongitude!,
+            }}
+            destination={{
+              latitude: destinationLatitude,
+              longitude: destinationLongitude,
+            }}
+            apikey={directionsAPI!}
             strokeColor="#0286FF"
-            strokeWidth={3}
+            strokeWidth={2}
           />
         </>
       )}

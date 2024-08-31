@@ -30,7 +30,7 @@ const SearchPlace = ({
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
 
-  console.log(`Results: ${JSON.stringify(results, null, 2)}`);
+  // console.log(`Results: ${JSON.stringify(results, null, 2)}`);
 
   const searchLocations = async (text: string) => {
     try {

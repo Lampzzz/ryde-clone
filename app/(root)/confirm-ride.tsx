@@ -9,10 +9,8 @@ import { useDriverStore } from "@/store";
 const ConfirmRide = () => {
   const { drivers, selectedDriver, setSelectedDriver } = useDriverStore();
 
-  // console.log("Drivers:", JSON.stringify(drivers, null, 2));
-
   return (
-    <RideLayout title="Choose a Rider" snapPoints={["70%", "85%"]}>
+    <RideLayout title="Choose a Rider" snapPoints={["45%", "85%"]}>
       <FlatList
         data={drivers}
         keyExtractor={(item, index) => index.toString()}
