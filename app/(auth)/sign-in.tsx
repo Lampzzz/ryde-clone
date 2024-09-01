@@ -25,8 +25,6 @@ const SignIn = () => {
         password: form.password,
       });
 
-      // console.log(`SignIn: ${JSON.stringify(signInAttempt, null, 2)}`);
-
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
         router.replace("/(root)/(tabs)/home");
@@ -35,7 +33,6 @@ const SignIn = () => {
         Alert.alert("Error", "Log in failed. Please try again.");
       }
     } catch (err: any) {
-      console.log(JSON.stringify(err, null, 2));
       Alert.alert("Error", err.errors[0].longMessage);
     }
   }, [isLoaded, form]);

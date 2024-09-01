@@ -54,6 +54,7 @@ const Home = () => {
         setHasPermission(false);
         return;
       }
+
       let location = await Location.getCurrentPositionAsync();
 
       const address = await Location.reverseGeocodeAsync({
@@ -114,12 +115,7 @@ const Home = () => {
               </TouchableOpacity>
             </View>
 
-            {/* <GoogleTextInput
-              icon={icons.search}
-              containerStyle="bg-white shadow-md shadow-neutral-300"
-              handlePress={handleDestinationPress}
-            /> */}
-
+            {/* Use GoogleTextInput if you are using google places */}
             <SearchPlace
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"

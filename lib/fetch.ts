@@ -4,11 +4,10 @@ export const fetchAPI = async (url: string, options?: RequestInit) => {
   try {
     const response = await fetch(url, options);
 
-    // console.log(`Fetch API: ${JSON.stringify(response, null, 2)}`);
-
     if (!response.ok) {
       new Error(`HTTP error! status: ${response.status}`);
     }
+
     return await response.json();
   } catch (error) {
     console.error("Fetch error:", error);
