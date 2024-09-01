@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gdumy14.RydeClone"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": "https://ryde.dev/"
+      },
+      "eas": {
+        "projectId": "5cd17fe1-1697-4b59-bad5-0e242ebf4165"
+      }
     }
   }
 }
